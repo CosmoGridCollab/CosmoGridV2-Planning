@@ -1,0 +1,90 @@
+from accuracy import classic_theta_switch,classic_replicas_switch
+
+achOutName      = "CosmoGridV2bench"
+
+# Initial Condition
+# ---------
+dBoxSize        = 500          # Mpc/h
+nGrid           = 256           # Simulation has nGrid^3 particles
+iLPT            = 2             # LPT order for IC
+iSeed           = 12            # Random seed
+dRedFrom        = 49            # Starting redshift
+
+# Cosmology
+# ------------
+achClassFilename = "class_processed_matched.hdf5"
+bClass           = True
+h                = 0.6736
+nGridLin         = 208
+achLinSpecies    = "g+ncdm[0]+fld+metric" # these species are considered in the evolution
+achPkSpecies     = "g+ncdm[0]+fld"        # these species are considered in the power computation
+dNormalization   = 3.0589005893926147e-09 # calculated from simga_8 = 0.84
+dSpectral        = 0.9649
+iStartStep      = 0
+nSteps          = [70, 70]
+dRedTo          = [4.0, 0.0]
+
+# Cosmological Simulation
+# ------------
+bComove         = True          # Use comoving coordinates
+bPeriodic       = True          # with a periodic box
+bEwald          = True          # enable Ewald periodic boundaries
+
+# Lightcone
+# ---------
+bLightCone          = True # output lightcone
+bLightConeParticles = True # output particle positions
+dRedshiftLCP        = 0.5 # start redshift of the lightcone
+nSideHealpix        = 256 # nside of the Healpix maps
+sqdegLCP            = -1
+
+# Logging/Output
+# ------------
+iOutInterval    = 0
+iCheckInterval  = 0
+iLogInterval    = 1             # Log every major time step
+bDoDensity      = False
+bVDetails       = True
+bOverwrite      = True
+bParaRead       = True          # Read in parallel
+bParaWrite      = False         # Write in parallel (does not work on all file systems)
+#nParaRead      = 8             # Limit number of simultaneous readers to this
+#nParaWrite     = 8             # Limit number of simultaneous writers to this
+
+# Accuracy Parameters
+# ------------
+bEpsAccStep     = True          # Choose eps/a timestep criteria
+dTheta          = classic_theta_switch()        # 0.40, 0.55, 0.70 switch
+nReplicas       = classic_replicas_switch()     # 1 if theta > 0.52 otherwise 2
+
+# Memory and performance
+# ------------
+bMemUnordered   = True          # iOrder replaced by potential and group id
+bNewKDK         = True          # No accelerations in the particle, dual tree possible
+
+# Halos
+# -----
+bFindGroups = False
+dTau        = 0.0002403846153846154
+nMinMembers = 150
+
+# Measure P(k)
+# ------------
+nGridPk          = 256          # Grid for P(k) measurement, nGridPk = nGrid is a sensible choice
+iPkInterval      = 1            # 1: pk files are produced in every base time step
+iDeltakInterval  = 0            # 0: no deltak files are produced
+
+
+# Callbacks
+# ------------
+from PKDGRAV import add_analysis
+
+# from pkdgrav3_analysis_hooks import MassGrid 
+# add_analysis(MassGrid(nGrid))
+
+from pkdgrav3_analysis_hooks import HealpixConverter
+add_analysis(HealpixConverter(namespace=achOutName, nside=nSideHealpix))
+
+from pkdgrav3_analysis_hooks import LightconeConverter
+add_analysis(LightconeConverter(namespace=achOutName, output_format='h5'))
+

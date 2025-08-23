@@ -1,0 +1,15 @@
+module load stack/2024-06
+module load gcc
+module load cmake
+module load gsl
+module load fftw
+module load hdf5
+module load python
+module load openmpi
+module load boost
+
+source /cluster/work/refregier/tomaszk/projects/250812_cosmogridv2/005_compile_epyc7742/venv/bin/activate
+
+export PYTHONPATH=/cluster/work/refregier/tomaszk/projects/250812_cosmogridv2/005_compile_epyc7742/pkdgrav3_a6d79f4/modules/:$PYTHONPATH
+echo PYTHONPATH $PYTHONPATH
+
