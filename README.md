@@ -14,6 +14,7 @@ Additional outputs to implement:
 2) Halo shapes
 3) Tidal tensor maps
 
+References:
 
 [1] https://arxiv.org/abs/2602.06133
 
