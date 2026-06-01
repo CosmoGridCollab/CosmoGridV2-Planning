@@ -12,6 +12,7 @@ Features to implement:
 Additional outputs to implement:
 1) Sperical Overdensity for halos
 2) Halo shapes
+3) Tidal tensor maps
 
 
 [1] https://arxiv.org/abs/2602.06133
